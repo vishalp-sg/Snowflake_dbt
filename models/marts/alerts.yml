@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: alerts
+    description: "Stores alert events triggered by abnormal telemetry data"
+    columns:
+      - name: device_id
+        tests:
+          - not_null
+
+      - name: alert_code
+        description: "The code representing the specific type of alert triggered by telemetry data."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['P021', 'P022', 'P023', 'P024']
+
+      - name: severity
+        description: "The severity level of the alert."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']
+
+      - name: ts
+        description: "Timestamp when the alert event occurred."
+        tests:
+          - not_null

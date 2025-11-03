@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: device_health
+    description: "Aggregated device performance and fault metrics"
+    columns:
+      - name: device_id
+        description: "Unique ID of the tractor device"
+        tests:
+          - not_null
+          - unique
+
+      - name: avg_temp_1h
+        description: "Average engine temperature in the last hour (°C)"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 150
+
+      - name: faults_count_24h
+        description: "Total number of faults in the last 24 hours"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1000
