@@ -36,7 +36,6 @@ models:
       +materialized: view
       snowflake_warehouse: tractor_wh
     marts:
-      +materialized: table
-      +schema: core
+      +materialized: table 
       snowflake_warehouse: tractor_wh
     

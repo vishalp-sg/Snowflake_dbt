@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: telemetry_events
+    description: "Telemetry events data, transformed from core.new_telemetry_events source."
+    columns:
+      - name: device_id
+        description: "Unique ID of the tractor device."
+        tests:
+          - not_null
+
+      - name: ts
+        description: "Event timestamp."
+        tests:
+          - not_null
+          - unique
+
+      - name: oil_temp_c
+        description: "Engine oil temperature in Celsius."
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: -50
+                max_value: 200
+
+      - name: speed
+        description: "Vehicle speed in km/h."
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 200
+
+      - name: fuel_level_pct
+        description: "Fuel level as a percentage."
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 100

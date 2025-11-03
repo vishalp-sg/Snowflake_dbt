@@ -2,6 +2,7 @@ version: 2
 
 sources:
   - name: core
-    schema: core
+    database: TRACTOR_DB        # your Snowflake DB
+    schema: TRACTOR_SCHEMA_CORE # where the table actually lives
     tables:
       - name: new_telemetry_events
