@@ -1,0 +1,57 @@
+name: dbt Tests on Push
+
+on:
+  push:
+    branches:
+      - main
+      - vishalp-sg-patch-1
+      - test_dbt
+  pull_request:
+    branches:
+      - main
+      - vishalp-sg-patch-1
+      - test_dbt
+
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dbt
+        run: |
+          pip install dbt-snowflake
+      
+      - name: Create profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << EOF
+          tractor_project:
+            outputs:
+              prod:
+                type: snowflake
+                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+                user: ${{ secrets.SNOWFLAKE_USER }}
+                password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+                role: ${{ secrets.SNOWFLAKE_ROLE }}
+                database: ${{ secrets.SNOWFLAKE_DATABASE }}
+                warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+                schema: ${{ secrets.SNOWFLAKE_SCHEMA }}
+                threads: 4
+                client_session_keep_alive: false
+            target: prod
+          EOF
+      
+      - name: dbt Debug
+        run: dbt debug 
+      
+      - name: Run dbt Tests
+        run: 
+          dbt test --select telemetry_events alerts device_health 
