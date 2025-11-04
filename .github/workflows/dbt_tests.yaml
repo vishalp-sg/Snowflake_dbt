@@ -33,7 +33,7 @@ jobs:
         run: |
           mkdir -p ~/.dbt
           cat > ~/.dbt/profiles.yml << EOF
-          Tractor_DBT:
+          tractor_project:
             outputs:
               prod:
                 type: snowflake
