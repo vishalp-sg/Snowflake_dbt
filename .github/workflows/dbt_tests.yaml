@@ -52,6 +52,9 @@ jobs:
       - name: dbt Debug
         run: dbt debug 
       
+      - name: Install dbt packages
+        run: dbt deps
+
       - name: Run dbt Tests
         run: 
           dbt test --select telemetry_events alerts device_health 
